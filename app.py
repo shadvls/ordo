@@ -20,10 +20,15 @@ def list_tasks():
 @app.route('/api/tasks', methods=['POST'])
 def create_task():
     data = request.get_json()
-    if not data or not data.get('title'):
+    if not data:
+        return jsonify({'error': 'Request body is required'}), 400
+    title = data.get('title', '').strip()
+    if not title:
         return jsonify({'error': 'Title is required'}), 400
+    if len(title) > 200:
+        return jsonify({'error': 'Title must be 200 characters or fewer'}), 400
     task = Task(
-        title=data['title'].strip(),
+        title=title,
         description=data.get('description', ''),
         category=data.get('category', 'general'),
         priority=data.get('priority', 0),
@@ -45,8 +50,15 @@ def update_task(task_id):
     if not task:
         return jsonify({'error': 'Task not found'}), 404
     data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Request body is required'}), 400
     if data.get('title') is not None:
-        task.title = data['title'].strip()
+        title = data['title'].strip()
+        if not title:
+            return jsonify({'error': 'Title cannot be empty'}), 400
+        if len(title) > 200:
+            return jsonify({'error': 'Title must be 200 characters or fewer'}), 400
+        task.title = title
     if data.get('description') is not None:
         task.description = data['description']
     if data.get('category') is not None:
