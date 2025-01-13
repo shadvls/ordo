@@ -13,6 +13,8 @@
 
     App.tasks = new App.Collections.TaskList();
 
+    App.listView = new App.Views.TaskList();
+
     App.router = new App.Router();
 
     Backbone.history.start();
