@@ -1,14 +1,5 @@
 ;(function ($, _, Backbone, Handlebars) {
 
-  var App = {
-    Models: {},
-    Collections: {},
-    Views: {},
-    Router: {}
-  };
-
-  window.App = App;
-
   $(function () {
 
     App.tasks = new App.Collections.TaskList();
