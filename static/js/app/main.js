@@ -11,6 +11,25 @@
     Backbone.history.start();
 
     App.router.navigate('', { trigger: true });
+
+    $(document).on('keydown', function (e) {
+      var tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+        if (e.key === 'Escape') {
+          e.target.blur();
+        }
+        return;
+      }
+      if (e.key === '/' && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        $('#search-input').focus();
+      }
+      if (e.key === 'n' && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        $('#quick-title').focus();
+      }
+    });
+
   });
 
 })(jQuery, _, Backbone, Handlebars);

@@ -14,7 +14,14 @@
   <Header class="app-header">
     <div class="container">
       <a class="app-brand" href="#/"><i class="fa fa-check-square-o"></i> Ordo</a>
-      <p class="app-tagline">Stay organized. Get things done.</p>
+      <div class="header-actions">
+        <div class="search-box">
+          <i class="fa fa-search"></i>
+          <input type="text" id="search-input" placeholder="Search tasks..." />
+          <button class="search-clear" id="search-clear"><i class="fa fa-times"></i></button>
+        </div>
+        <span class="keyboard-hint"><kbd>/</kbd></span>
+      </div>
     </div>
   </Header>
 
@@ -54,6 +61,19 @@
     <div class="empty-state">
       <i class="fa fa-inbox"></i>
       <p>No tasks yet. Create one above!</p>
+    </div>
+  </script>
+
+  <script id="tpl-empty-filtered" type="text/x-handlebars-template">
+    <div class="empty-state">
+      <i class="fa fa-search"></i>
+      <p>No tasks match <strong>"{{query}}"</strong></p>
+    </div>
+  </script>
+
+  <script id="tpl-loading" type="text/x-handlebars-template">
+    <div class="loading-overlay">
+      <div class="loading-spinner"></div>
     </div>
   </script>
 

@@ -6,6 +6,8 @@
 
     template: Handlebars.compile($('#tpl-app').html()),
 
+    searchQuery: '',
+
     initialize: function () {
       this.collection = App.tasks;
       this.listenTo(this.collection, 'reset', this.render);
@@ -19,6 +21,7 @@
       this.renderProgress();
       this.renderQuickAdd();
       this.renderList();
+      this._bindSearch();
       return this;
     },
 
@@ -36,6 +39,18 @@
     renderList: function () {
       var pending = this.collection.pending();
       var done    = this.collection.done();
+      var filtered = this.searchQuery.length > 0;
+
+      if (filtered) {
+        var q = this.searchQuery.toLowerCase();
+        pending = _.filter(pending, function (t) {
+          return t.get('title').toLowerCase().indexOf(q) !== -1;
+        });
+        done = _.filter(done, function (t) {
+          return t.get('title').toLowerCase().indexOf(q) !== -1;
+        });
+      }
+
       var listHtml = Handlebars.compile($('#tpl-task-list').html())({
         pendingCount: pending.length,
         doneCount: done.length
@@ -44,7 +59,11 @@
 
       var self = this;
       if (pending.length === 0 && done.length === 0) {
-        $('#pending-list').html(Handlebars.compile($('#tpl-empty').html())());
+        if (filtered) {
+          $('#pending-list').html(Handlebars.compile($('#tpl-empty-filtered').html())({ query: this.searchQuery }));
+        } else {
+          $('#pending-list').html(Handlebars.compile($('#tpl-empty').html())());
+        }
       } else {
         _.each(pending, function (t) { self._appendItem('#pending-list', t); });
         _.each(done, function (t) { self._appendItem('#done-list', t); });
@@ -57,6 +76,7 @@
         e.preventDefault();
         var title = $('#quick-title').val().trim();
         if (!title) return;
+        self._showLoading();
         self.collection.create({ title: title }, {
           wait: true,
           success: function () {
@@ -69,6 +89,31 @@
           }
         });
       });
+    },
+
+    _bindSearch: function () {
+      var self = this;
+      var $input = $('#search-input');
+      var $clear = $('#search-clear');
+
+      $input.on('input', function () {
+        self.searchQuery = $(this).val();
+        $clear.toggleClass('visible', self.searchQuery.length > 0);
+        self.renderList();
+      });
+
+      $clear.on('click', function () {
+        $input.val('');
+        self.searchQuery = '';
+        $clear.removeClass('visible');
+        self.renderList();
+        $input.focus();
+      });
+    },
+
+    _showLoading: function () {
+      var html = Handlebars.compile($('#tpl-loading').html())();
+      $('#progress-region').after(html);
     },
 
     _appendItem: function (region, model) {
