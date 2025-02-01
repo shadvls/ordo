@@ -41,6 +41,8 @@
       };
       this.$el.html(this.template(data));
       if (done) this.$el.find('.task-item').addClass('opacity-75');
+      var el = this.$el.find('.task-item')[0];
+      if (el) App.Animations.animateIn(el);
       return this;
     },
 

@@ -21,6 +21,8 @@
 
     render: function () {
       this.$el.html(this.template(this.model.toJSON()));
+      var el = this.$el.find('[class*="animate-scale-in"]')[0] || this.$el.find('.panel-detail, .bg-white')[0];
+      if (el) App.Animations.scaleIn(el);
       return this;
     },
 

@@ -60,13 +60,21 @@
       var self = this;
       if (pending.length === 0 && done.length === 0) {
         if (filtered) {
-          $('#pending-list').html(Handlebars.compile($('#tpl-empty-filtered').html())({ query: this.searchQuery }));
+          var html = Handlebars.compile($('#tpl-empty-filtered').html())({ query: this.searchQuery });
+          $('#pending-list').html(html);
+          App.Animations.animateIn('#pending-list .empty-state');
         } else {
-          $('#pending-list').html(Handlebars.compile($('#tpl-empty').html())());
+          var html = Handlebars.compile($('#tpl-empty').html())();
+          $('#pending-list').html(html);
+          App.Animations.animateIn('#pending-list .empty-state');
         }
       } else {
         _.each(pending, function (t) { self._appendItem('#pending-list', t); });
         _.each(done, function (t) { self._appendItem('#done-list', t); });
+        setTimeout(function () {
+          App.Animations.staggerItems('#pending-list');
+          setTimeout(function () { App.Animations.staggerItems('#done-list'); }, 80);
+        }, 50);
       }
     },
 
@@ -98,14 +106,14 @@
 
       $input.on('input', function () {
         self.searchQuery = $(this).val();
-        $clear.toggleClass('visible', self.searchQuery.length > 0);
+        $clear.toggleClass('hidden', self.searchQuery.length === 0);
         self.renderList();
       });
 
       $clear.on('click', function () {
         $input.val('');
         self.searchQuery = '';
-        $clear.removeClass('visible');
+        $clear.addClass('hidden');
         self.renderList();
         $input.focus();
       });
