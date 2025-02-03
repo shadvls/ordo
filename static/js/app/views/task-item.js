@@ -28,13 +28,21 @@
       var borderClass = '';
       if (pClass === 'urgent') borderClass = 'border-l-4 border-l-red-500';
       else if (pClass === 'high') borderClass = 'border-l-4 border-l-amber-400';
+      var dueDate = m.get('due_date') || '';
+      var dueOverdue = false;
+      if (dueDate && !done) {
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var due = new Date(dueDate + 'T00:00:00');
+        dueOverdue = due < today;
+      }
       var data = {
         id: m.id,
         title: m.get('title'),
         category: m.get('category'),
         done: done,
-        dueDate: m.get('due_date') || '',
-        dueOverdue: false,
+        dueDate: dueDate,
+        dueOverdue: dueOverdue,
         borderClass: borderClass,
         priorityClass: pClass,
         priorityLabel: priority === 2 ? 'Urgent' : priority === 1 ? 'High' : null

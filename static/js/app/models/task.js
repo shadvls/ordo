@@ -8,7 +8,8 @@
       description: '',
       status: 'pending',
       priority: 0,
-      category: 'general'
+      category: 'general',
+      due_date: ''
     },
 
     toggle: function () {

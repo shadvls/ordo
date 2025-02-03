@@ -44,6 +44,7 @@ def create_task(data):
         'status': data.get('status', 'pending'),
         'priority': data.get('priority', 0),
         'category': data.get('category', 'general'),
+        'due_date': data.get('due_date', ''),
         'created_at': now,
         'updated_at': now,
     }
@@ -55,7 +56,7 @@ def update_task(task_id, data):
     tasks = _load()
     for t in tasks:
         if t['id'] == task_id:
-            for key in ('title', 'description', 'status', 'priority', 'category'):
+            for key in ('title', 'description', 'status', 'priority', 'category', 'due_date'):
                 if key in data:
                     val = data[key]
                     if key == 'title':
