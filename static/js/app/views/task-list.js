@@ -7,6 +7,7 @@
     template: Handlebars.compile($('#tpl-app').html()),
 
     searchQuery: '',
+    categoryFilter: '',
 
     initialize: function () {
       this.collection = App.tasks;
@@ -20,6 +21,7 @@
       this.$el.html(this.template());
       this.renderProgress();
       this.renderQuickAdd();
+      this.renderFilterPills();
       this.renderList();
       this._bindSearch();
       return this;
@@ -36,19 +38,32 @@
       this._bindQuickAdd();
     },
 
+    renderFilterPills: function () {
+      var cats = [
+        { label: 'All', slug: '' },
+        { label: 'General', slug: 'general' },
+        { label: 'Work', slug: 'work' },
+        { label: 'Personal', slug: 'personal' },
+        { label: 'Learning', slug: 'learning' }
+      ];
+      _.each(cats, function (c) { c.active = c.slug === this.categoryFilter; }, this);
+      var html = Handlebars.compile($('#tpl-filter-pills').html())({
+        categories: cats,
+        hasActive: this.categoryFilter.length > 0
+      });
+      $('#add-region').after('<div id="filter-region" class="mb-3">' + html + '</div>');
+      this._bindFilterPills();
+    },
+
     renderList: function () {
       var pending = this.collection.pending();
       var done    = this.collection.done();
-      var filtered = this.searchQuery.length > 0;
+      var hasSearch = this.searchQuery.length > 0;
+      var hasCat = this.categoryFilter.length > 0;
 
-      if (filtered) {
-        var q = this.searchQuery.toLowerCase();
-        pending = _.filter(pending, function (t) {
-          return t.get('title').toLowerCase().indexOf(q) !== -1;
-        });
-        done = _.filter(done, function (t) {
-          return t.get('title').toLowerCase().indexOf(q) !== -1;
-        });
+      if (hasSearch || hasCat) {
+        pending = _.filter(pending, _.bind(this._matchTask, this));
+        done = _.filter(done, _.bind(this._matchTask, this));
       }
 
       var listHtml = Handlebars.compile($('#tpl-task-list').html())({
@@ -59,7 +74,7 @@
 
       var self = this;
       if (pending.length === 0 && done.length === 0) {
-        if (filtered) {
+        if (hasSearch) {
           var html = Handlebars.compile($('#tpl-empty-filtered').html())({ query: this.searchQuery });
           $('#pending-list').html(html);
           App.Animations.animateIn('#pending-list .empty-state');
@@ -76,6 +91,18 @@
           setTimeout(function () { App.Animations.staggerItems('#done-list'); }, 80);
         }, 50);
       }
+    },
+
+    _matchTask: function (t) {
+      var match = true;
+      if (this.searchQuery.length > 0) {
+        var q = this.searchQuery.toLowerCase();
+        match = match && t.get('title').toLowerCase().indexOf(q) !== -1;
+      }
+      if (this.categoryFilter.length > 0) {
+        match = match && t.get('category') === this.categoryFilter;
+      }
+      return match;
     },
 
     _bindQuickAdd: function () {
@@ -96,6 +123,20 @@
             App.Views.Notify.error(msg);
           }
         });
+      });
+    },
+
+    _bindFilterPills: function () {
+      var self = this;
+      $(document).on('click', '.filter-pill', function () {
+        self.categoryFilter = $(this).data('category') || '';
+        self.renderFilterPills();
+        self.renderList();
+      });
+      $(document).on('click', '#clear-filter', function () {
+        self.categoryFilter = '';
+        self.renderFilterPills();
+        self.renderList();
       });
     },
 
