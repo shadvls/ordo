@@ -51,6 +51,10 @@ html *::after {
   background: #1e293b;
 }
 
+/* Command palette item selection */
+.cmd-item[data-selected] { background: #f1f5f9; }
+.dark .cmd-item[data-selected] { background: rgba(51, 65, 85, 0.5); }
+
 /* Selection */
 ::selection { background: #6366f1; color: white; }
 .dark ::selection { background: #818cf8; color: #0f172a; }

@@ -35,38 +35,75 @@
       var $overlay = $('#command-palette-overlay');
       var $input = $('#cmd-input');
       var $results = $('#cmd-results');
+
+      function openPalette() {
+        $overlay.removeClass('hidden');
+        $input.val('').focus();
+        $results.find('.cmd-item').show();
+      }
+
+      function closePalette() {
+        $overlay.addClass('hidden');
+        $input.blur();
+      }
+
       $(document).on('keydown', function (e) {
         if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
           e.preventDefault();
-          $overlay.toggleClass('hidden');
-          if (!$overlay.hasClass('hidden')) $input.focus();
+          if ($overlay.hasClass('hidden')) openPalette();
+          else closePalette();
         }
       });
+
       $overlay.on('click', function (e) {
-        if (e.target === this) $overlay.addClass('hidden');
+        if (e.target === this) closePalette();
       });
+
       $(document).on('keydown', function (e) {
-        if (e.key === 'Escape') $overlay.addClass('hidden');
+        if (e.key === 'Escape' && !$overlay.hasClass('hidden')) {
+          closePalette();
+        }
       });
+
       $results.on('click', '.cmd-item', function () {
         var action = $(this).data('action');
-        $overlay.addClass('hidden');
-        if (action === 'focus-search') {
-          $('#search-input').focus();
-        } else if (action === 'add-task') {
-          $('#quick-title').focus();
-        } else if (action === 'toggle-theme') {
-          $('#theme-toggle').click();
-        } else if (action === 'go-home') {
-          Backbone.history.navigate('', { trigger: true });
+        closePalette();
+        switch (action) {
+          case 'focus-search': $('#search-input').focus(); break;
+          case 'add-task':     $('#quick-title').focus(); break;
+          case 'toggle-theme': $('#theme-toggle').click(); break;
+          case 'go-home':      Backbone.history.navigate('', { trigger: true }); break;
         }
       });
+
       $input.on('input', function () {
         var q = $(this).val().toLowerCase();
         $results.find('.cmd-item').each(function () {
-          var text = $(this).text().toLowerCase();
-          $(this).toggle(text.indexOf(q) !== -1);
+          var $item = $(this);
+          var text = $item.find('span').text().toLowerCase();
+          $item.toggle(text.indexOf(q) !== -1);
         });
+      });
+
+      $input.on('keydown', function (e) {
+        var $visible = $results.find('.cmd-item:visible');
+        if (e.key === 'Enter') {
+          if ($visible.length) $visible.first().click();
+        }
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          var idx = $visible.index($visible.filter('[data-selected]'));
+          $visible.removeAttr('data-selected');
+          var next = idx < $visible.length - 1 ? idx + 1 : 0;
+          $visible.eq(next).attr('data-selected', 'true');
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          var idx = $visible.index($visible.filter('[data-selected]'));
+          $visible.removeAttr('data-selected');
+          var prev = idx > 0 ? idx - 1 : $visible.length - 1;
+          $visible.eq(prev).attr('data-selected', 'true');
+        }
       });
     }());
 
