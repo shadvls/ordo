@@ -114,34 +114,40 @@
       var ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      var count = 180;
       var pieces = [];
-      var colors = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#8b5cf6'];
-      for (var i = 0; i < 120; i++) {
+      var colors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#8b5cf6', '#06b6d4', '#f97316'];
+      for (var i = 0; i < count; i++) {
         pieces.push({
           x: Math.random() * canvas.width,
-          y: -20 - Math.random() * 300,
-          w: 6 + Math.random() * 6,
-          h: 4 + Math.random() * 4,
+          y: -40 - Math.random() * 400,
+          w: 4 + Math.random() * 8,
+          h: 4 + Math.random() * 6,
           color: colors[Math.floor(Math.random() * colors.length)],
-          vx: (Math.random() - 0.5) * 3,
-          vy: 2 + Math.random() * 3,
+          vx: (Math.random() - 0.5) * 5,
+          vy: 1.5 + Math.random() * 4,
           rot: Math.random() * 360,
-          rv: (Math.random() - 0.5) * 6
+          rv: (Math.random() - 0.5) * 8,
+          opacity: 1
         });
       }
-      var frames = 0;
-      function animate() {
+      var start = null;
+      function animate(ts) {
+        if (!start) start = ts;
+        var elapsed = ts - start;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         var alive = false;
         for (var i = 0; i < pieces.length; i++) {
           var p = pieces[i];
-          p.x += p.vx;
+          p.x += p.vx + Math.sin(elapsed * 0.002 + i) * 0.3;
           p.y += p.vy;
-          p.vy += 0.06;
+          p.vy += 0.05;
           p.rot += p.rv;
-          if (p.y < canvas.height + 50) {
+          if (elapsed > 2000) p.opacity = Math.max(0, p.opacity - 0.008);
+          if (p.y < canvas.height + 60 && p.opacity > 0) {
             alive = true;
             ctx.save();
+            ctx.globalAlpha = p.opacity;
             ctx.translate(p.x, p.y);
             ctx.rotate(p.rot * Math.PI / 180);
             ctx.fillStyle = p.color;
@@ -149,10 +155,9 @@
             ctx.restore();
           }
         }
-        frames++;
-        if (alive && frames < 200) requestAnimationFrame(animate);
+        if (alive) requestAnimationFrame(animate);
       }
-      animate();
+      requestAnimationFrame(animate);
     };
 
     // Keyboard shortcuts
