@@ -93,6 +93,10 @@ CORS(app)
 def list_tasks():
     tasks = all_tasks()
     tasks.sort(key=lambda t: (-t['priority'], t['created_at']), reverse=True)
+    limit = request.args.get('limit', type=int)
+    offset = request.args.get('offset', default=0, type=int)
+    if limit:
+        tasks = tasks[offset:offset + limit]
     return jsonify(tasks)
 
 @app.route('/api/tasks', methods=['POST'])
