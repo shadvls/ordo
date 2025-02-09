@@ -144,14 +144,20 @@
       var self = this;
       var $input = $('#search-input');
       var $clear = $('#search-clear');
+      var debounceTimer = null;
 
       $input.on('input', function () {
-        self.searchQuery = $(this).val();
-        $clear.toggleClass('hidden', self.searchQuery.length === 0);
-        self.renderList();
+        var val = $(this).val();
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+          self.searchQuery = val;
+          $clear.toggleClass('hidden', val.length === 0);
+          self.renderList();
+        }, 150);
       });
 
       $clear.on('click', function () {
+        if (debounceTimer) clearTimeout(debounceTimer);
         $input.val('');
         self.searchQuery = '';
         $clear.addClass('hidden');
