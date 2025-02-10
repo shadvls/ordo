@@ -164,7 +164,7 @@
       </label>
       <div class="flex-1 min-w-0 cursor-pointer" data-navigate="{{id}}">
         <div class="task-title text-sm font-medium text-slate-800 dark:text-slate-200 {{#if done}}line-through text-slate-400 dark:text-slate-500{{/if}} truncate">{{title}}</div>
-        <div class="flex items-center gap-2 mt-0.5">
+        <div class="flex items-center gap-2 mt-0.5 flex-wrap">
           {{#if priorityLabel}}
             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider {{#ifEq priorityClass "urgent"}}bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300{{/ifEq}}{{#ifEq priorityClass "high"}}bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300{{/ifEq}}">{{priorityLabel}}</span>
           {{/if}}
@@ -173,6 +173,9 @@
           {{/if}}
           {{#if dueDate}}
             <span class="inline-flex items-center gap-1 text-[11px] {{#if dueOverdue}}text-red-500 dark:text-red-400{{else}}text-slate-400 dark:text-slate-500{{/if}}"><i class="fa-regular fa-calendar text-[10px]"></i>{{dueDate}}</span>
+          {{/if}}
+          {{#if timeAgo}}
+            <span class="text-[11px] text-slate-400 dark:text-slate-500"><i class="fa-regular fa-clock text-[10px]"></i> {{timeAgo}}</span>
           {{/if}}
         </div>
       </div>

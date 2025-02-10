@@ -36,6 +36,16 @@
         var due = new Date(dueDate + 'T00:00:00');
         dueOverdue = due < today;
       }
+      var created = m.get('created_at');
+      var timeAgo = '';
+      if (created) {
+        var diff = Date.now() - new Date(created).getTime();
+        var mins = Math.floor(diff / 60000);
+        if (mins < 1) timeAgo = 'just now';
+        else if (mins < 60) timeAgo = mins + 'm ago';
+        else if (mins < 1440) timeAgo = Math.floor(mins / 60) + 'h ago';
+        else timeAgo = Math.floor(mins / 1440) + 'd ago';
+      }
       var data = {
         id: m.id,
         title: m.get('title'),
@@ -43,6 +53,7 @@
         done: done,
         dueDate: dueDate,
         dueOverdue: dueOverdue,
+        timeAgo: timeAgo,
         borderClass: borderClass,
         priorityClass: pClass,
         priorityLabel: priority === 2 ? 'Urgent' : priority === 1 ? 'High' : null
