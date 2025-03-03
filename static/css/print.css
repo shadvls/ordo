@@ -1,0 +1,5 @@
+@media print {
+  header, #add-region, #filter-region, .task-actions, .task-check, .btn-icon { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .task-item { break-inside: avoid; border: 1px solid #ccc !important; }
+}
