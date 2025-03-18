@@ -154,7 +154,7 @@ def toggle(task_id):
 
 @app.route('/api/health')
 def health():
-    return jsonify({'status': 'ok'})
+    return jsonify({'status': 'ok', 'version': '1.0.0', 'timestamp': datetime.utcnow().isoformat()})
 
 @app.errorhandler(404)
 def not_found(e):
