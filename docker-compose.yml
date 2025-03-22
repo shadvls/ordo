@@ -3,10 +3,20 @@ services:
     build: .
     ports:
       - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     volumes:
       - ordo_data:/app/data
     environment:
       - FLASK_ENV=production
 
-volumes:
+healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
   ordo_data:
