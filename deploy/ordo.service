@@ -1,0 +1,8 @@
+[Unit]
+Description=Ordo Task Manager
+[Service]
+WorkingDirectory=/app
+ExecStart=gunicorn api.index:app --bind 0.0.0.0:5000
+Restart=always
+[Install]
+WantedBy=multi-user.target
