@@ -1,0 +1,1 @@
+{"name":"ordo","private":true,"scripts":{"lint":"prettier --check static/","format":"prettier --write static/"}}
