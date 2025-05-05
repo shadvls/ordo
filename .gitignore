@@ -13,3 +13,4 @@ htmlcov/
 dist/
 build/
 *.db
+node_modules/
