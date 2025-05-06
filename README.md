@@ -1,39 +1,17 @@
-# Ordo
+# Ordo - Premium Task Manager
 
-> A simple task manager built with Flask and Backbone.js.
+A modern, feature-rich task management application built with Flask and Backbone.js.
 
-Keep track of your daily tasks with a clean, responsive interface. Ordo lets you organize tasks by category and priority, toggle completion status, and track your progress at a glance.
+- Real-time task CRUD operations
+- Category and priority management
+- Dark mode with system preference detection
+- Keyboard shortcuts and command palette
+- Animations powered by GSAP
+- Docker and Vercel deployment support
 
 ## Tech Stack
-
-- **Backend:** Flask (Python) + JSON file storage
-- **Frontend:** Backbone.js + Handlebars + jQuery
-- **Styling:** Bootstrap 3 + Font Awesome
-- **Deployment:** Docker / Vercel
-
-## Quick Start
-
-```bash
-# Run with Docker
-docker compose up -d
-# Open http://localhost:5000
-
-# Or run locally
-pip install -r requirements.txt
-python api/index.py
-```
-
-## API Endpoints
-
-| Method | Endpoint              | Description       |
-|--------|-----------------------|-------------------|
-| GET    | `/api/tasks`          | List all tasks    |
-| POST   | `/api/tasks`          | Create a task     |
-| GET    | `/api/tasks/:id`      | Get a task        |
-| PUT    | `/api/tasks/:id`      | Update a task     |
-| PATCH  | `/api/tasks/:id/toggle` | Toggle status  |
-| DELETE | `/api/tasks/:id`      | Delete a task     |
-
-## License
-
-MIT
+- **Backend**: Flask (Python) + JSON file storage
+- **Frontend**: Backbone.js + Handlebars + jQuery
+- **Styling**: Tailwind CSS + Font Awesome 6
+- **Animations**: GSAP (GreenSock Animation Platform)
+- **Deployment**: Docker / Vercel / Gunicorn
