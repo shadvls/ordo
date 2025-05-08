@@ -27,3 +27,14 @@ A modern, feature-rich task management application built with Flask and Backbone
 | PATCH | /api/tasks/:id/toggle | Toggle status |
 | DELETE | /api/tasks/:id | Delete a task |
 | GET | /api/health | Health check |
+## Quick Start
+
+```bash
+pip install -r requirements.txt
+python api/index.py
+```
+
+### Docker
+```bash
+docker compose up -d
+```
