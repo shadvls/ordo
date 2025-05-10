@@ -46,3 +46,13 @@ docker compose up -d
 | PORT | 5000 | Server port |
 | FLASK_ENV | production | Environment |
 | ORDO_DATA_DIR | /tmp/ordo-data | Data path |
+
+## Testing
+
+```bash
+pytest tests/ --cov=api/
+```
+
+## License
+
+MIT
