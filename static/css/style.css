@@ -58,3 +58,4 @@ html *::after {
 /* Selection */
 ::selection { background: #6366f1; color: white; }
 .dark ::selection { background: #818cf8; color: #0f172a; }
+/* Task item hover scale effect */ .task-item:hover { transform: translateY(-1px); }
