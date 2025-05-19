@@ -60,3 +60,4 @@ html *::after {
 .dark ::selection { background: #818cf8; color: #0f172a; }
 /* Task item hover scale effect */ .task-item:hover { transform: translateY(-1px); }
 /* Quick add focus ring */ #quick-title:focus { box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+/* Notify animations */ .alert-enter { animation: slideDown 0.3s ease; }
