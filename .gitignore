@@ -14,3 +14,4 @@ dist/
 build/
 *.db
 node_modules/
+*.log\n.env.local
