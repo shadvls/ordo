@@ -14,3 +14,4 @@ htmlcov/
 .github/
 tests/
 *.md
+.env
