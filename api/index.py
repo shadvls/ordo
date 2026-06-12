@@ -1,12 +1,12 @@
 import json
 import os
-import sys
 from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 DATA_DIR = '/tmp/ordo-data'
 DATA_FILE = os.path.join(DATA_DIR, 'tasks.json')
+
 
 def _load():
     if not os.path.exists(DATA_FILE):
@@ -17,19 +17,23 @@ def _load():
     except (json.JSONDecodeError, IOError):
         return []
 
+
 def _save(tasks):
     os.makedirs(DATA_DIR, exist_ok=True)
     with open(DATA_FILE, 'w') as f:
         json.dump(tasks, f, indent=2)
 
+
 def all_tasks():
     return _load()
+
 
 def get_task(task_id):
     for t in _load():
         if t['id'] == task_id:
             return t
     return None
+
 
 def create_task(data):
     tasks = _load()
@@ -52,6 +56,7 @@ def create_task(data):
     _save(tasks)
     return task
 
+
 def update_task(task_id, data):
     tasks = _load()
     for t in tasks:
@@ -67,6 +72,7 @@ def update_task(task_id, data):
             return t
     return None
 
+
 def toggle_task(task_id):
     tasks = _load()
     for t in tasks:
@@ -77,6 +83,7 @@ def toggle_task(task_id):
             return t
     return None
 
+
 def delete_task(task_id):
     tasks = _load()
     for i, t in enumerate(tasks):
@@ -86,13 +93,16 @@ def delete_task(task_id):
             return removed
     return None
 
+
 app = Flask(__name__)
 CORS(app)
+
 
 @app.after_request
 def add_version_header(response):
     response.headers["X-API-Version"] = "1.0.0"
     return response
+
 
 @app.route('/api/tasks', methods=['GET'])
 def list_tasks():
@@ -103,6 +113,7 @@ def list_tasks():
     if limit:
         tasks = tasks[offset:offset + limit]
     return jsonify(tasks)
+
 
 @app.route('/api/tasks', methods=['POST'])
 def create():
@@ -117,12 +128,14 @@ def create():
     task = create_task(data)
     return jsonify(task), 201
 
+
 @app.route('/api/tasks/<int:task_id>', methods=['GET'])
 def get(task_id):
     task = get_task(task_id)
     if not task:
         return jsonify({'error': 'Task not found'}), 404
     return jsonify(task)
+
 
 @app.route('/api/tasks/<int:task_id>', methods=['PUT'])
 def update(task_id):
@@ -141,6 +154,7 @@ def update(task_id):
     updated = update_task(task_id, data)
     return jsonify(updated)
 
+
 @app.route('/api/tasks/<int:task_id>', methods=['DELETE'])
 def delete(task_id):
     task = get_task(task_id)
@@ -148,6 +162,7 @@ def delete(task_id):
         return jsonify({'error': 'Task not found'}), 404
     delete_task(task_id)
     return jsonify({'message': 'Task deleted'})
+
 
 @app.route('/api/tasks/<int:task_id>/toggle', methods=['PATCH'])
 def toggle(task_id):
@@ -157,22 +172,27 @@ def toggle(task_id):
     updated = toggle_task(task_id)
     return jsonify(updated)
 
+
 @app.route('/api/health')
 def health():
     return jsonify({'status': 'ok', 'version': '1.0.0', 'timestamp': datetime.utcnow().isoformat()})
+
 
 @app.errorhandler(404)
 def not_found(e):
     return jsonify({'error': 'Not found'}), 404
 
+
 @app.errorhandler(500)
 def server_error(e):
     return jsonify({'error': 'Internal server error'}), 500
 
+
 @app.route('/api/metrics')
 def metrics():
-    from api.monitoring import avg_response_time
     return jsonify({'uptime': 0, 'avg_response_time': 0})
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('FLASK_ENV') == 'development'

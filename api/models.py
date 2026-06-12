@@ -2,6 +2,7 @@ from datetime import datetime
 
 TASK_KEYS = ("title", "description", "status", "priority", "category", "due_date")
 
+
 def new_task(data):
     return {
         "id": data.get("id"),

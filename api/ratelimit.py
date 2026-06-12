@@ -2,6 +2,8 @@ import time
 from functools import wraps
 from flask import jsonify, request
 _requests = {}
+
+
 def rate_limit(limit=100, window=60):
     def decorator(f):
         @wraps(f)
