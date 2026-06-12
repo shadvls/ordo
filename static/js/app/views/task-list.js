@@ -24,6 +24,7 @@
       this.renderFilterPills();
       this.renderList();
       this._bindSearch();
+      this._bindFilterPills();
       return this;
     },
 
@@ -39,6 +40,7 @@
     },
 
     renderFilterPills: function () {
+      $('#filter-region').remove();
       var cats = [
         { label: 'All', slug: '' },
         { label: 'General', slug: 'general' },
@@ -52,7 +54,6 @@
         hasActive: this.categoryFilter.length > 0
       });
       $('#add-region').after('<div id="filter-region" class="mb-3">' + html + '</div>');
-      this._bindFilterPills();
     },
 
     renderList: function () {
@@ -128,12 +129,12 @@
 
     _bindFilterPills: function () {
       var self = this;
-      $(document).on('click', '.filter-pill', function () {
+      $(document).off('.filterPill').on('click.filterPill', '.filter-pill', function () {
         self.categoryFilter = $(this).data('category') || '';
         self.renderFilterPills();
         self.renderList();
       });
-      $(document).on('click', '#clear-filter', function () {
+      $(document).off('.filterClear').on('click.filterClear', '#clear-filter', function () {
         self.categoryFilter = '';
         self.renderFilterPills();
         self.renderList();
