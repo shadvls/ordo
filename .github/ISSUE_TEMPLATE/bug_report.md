@@ -1,10 +1,27 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Something broken on Ordo
+title: 'fix: '
+labels: bug
+assignees: ''
 ---
+
+**Component**
+<!-- e.g. Task list UI, Filter pills, Command palette, API endpoint -->
+
 **Describe the bug**
-A clear description.
-**To Reproduce**
-Steps to reproduce.
-**Expected behavior**
-What you expected.
+<!-- What happened vs what you expected -->
+
+**Steps to reproduce**
+1.
+2.
+3.
+
+**Environment**
+- OS:
+- Browser + version:
+- Device: Desktop / Mobile
+- Ordo URL:
+
+**Screenshots / recordings**
+<!-- Attach if applicable -->
