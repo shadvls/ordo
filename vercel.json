@@ -1,6 +1,6 @@
 {
   "builds": [
-    { "src": "api/**/*.py", "use": "@vercel/python" },
+    { "src": "api/index.py", "use": "@vercel/python" },
     { "src": "static/**/*", "use": "@vercel/static" },
     { "src": "index.html", "use": "@vercel/static" }
   ],
